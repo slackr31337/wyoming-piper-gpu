@@ -18,4 +18,5 @@ python3 -m wyoming_piper \
     --uri 'tcp://0.0.0.0:10200' \
     --data-dir /data \
     --data-dir /share/piper \
-    --download-dir /data "$@"
+    --download-dir /data \
+    --cuda "$@"
