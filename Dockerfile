@@ -22,13 +22,13 @@ RUN \
     && pip3 install --no-cache-dir torch \
     \
     && pip3 install --no-cache-dir \
-        onnxruntime-gpu \
-    \
-    && pip3 install --no-cache-dir \
         "wyoming-piper==${PIPER_LIB_VERSION}" \
     \
     && curl -L -s \
         "https://github.com/rhasspy/piper/releases/download/${PIPER_RELEASE}/piper_${TARGETARCH}${TARGETVARIANT}.tar.gz"|tar -zxvf - -C /usr/share \
+    \
+    && pip3 install --no-cache-dir \
+        onnxruntime-gpu \
     \
     && apt-get purge -y --auto-remove \
         build-essential \
