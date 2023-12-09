@@ -30,8 +30,12 @@ RUN \
     && curl -L -s \
         "https://github.com/rhasspy/piper/releases/download/${PIPER_RELEASE}/piper_${TARGETARCH}${TARGETVARIANT}.tar.gz"|tar -zxvf - -C /usr/share \
     \
-    && rm -rf /var/lib/apt/lists/* # buildkit
+    && apt-get purge -y --auto-remove \
+        build-essential \
+        python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
+COPY patch/process.py /usr/local/lib/python3.10/dist-packages/wyoming_piper/
 
 WORKDIR /
 COPY run.sh ./
