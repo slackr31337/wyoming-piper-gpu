@@ -35,6 +35,7 @@ RUN \
         python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Patch process.py to pass --cuda argument to piper
 COPY patch/process.py /usr/local/lib/python3.10/dist-packages/wyoming_piper/
 
 WORKDIR /
