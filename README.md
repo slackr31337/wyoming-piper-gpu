@@ -1,5 +1,5 @@
 # wyoming-piper-gpu
-Wyoming Piper docker container with GPU support for Home-Assistant
+Wyoming Piper docker container with Nvidia GPU support for Home-Assistant
 
 https://github.com/rhasspy/wyoming-piper
 
