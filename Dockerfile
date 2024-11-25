@@ -15,9 +15,7 @@ RUN \
         wget \
         curl \
         python3 \
-        python3-pip \
-    \
-    && rm -rf /var/lib/apt/lists/*
+        python3-pip
 
 RUN \
     pip3 install --no-cache-dir -U \
@@ -42,12 +40,9 @@ RUN \
     \
     && rm -r piper_phonemize-1.1.0-py3-none-any.whl
 
+# Clean up
 RUN \
-    apt-get purge -y --auto-remove \
-        build-essential \
-        python3-dev \
-    \
-    && rm -rf /var/lib/apt/lists/* \
+    rm -rf /var/lib/apt/lists/* \
     && rm /*.deb \
     && mkdir -p /share/piper
 
