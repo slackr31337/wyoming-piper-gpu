@@ -26,7 +26,7 @@ RUN \
     \
     && pip3 install --no-cache-dir torch \
     \
-    && wget https://github.com/rhasspy/piper-phonemize/releases/download/v1.1.0/piper_phonemize-1.1.0-cp39-cp39-manylinux_2_28_x86_64.whl \
+    && wget https://github.com/rhasspy/piper-phonemize/releases/download/v1.1.0/piper_phonemize-1.1.0-cp310-cp310-manylinux_2_28_x86_64.whl \
     \
     && mv piper_phonemize-1.1.0-cp310-cp310-manylinux_2_28_x86_64.whl piper_phonemize-1.1.0-py3-none-any.whl \
     \
