@@ -1,7 +1,9 @@
 {
     "cSpell.words": [
         "CUDA",
+        "manylinux",
         "onnxruntime",
+        "phonemize",
         "setuptools",
         "zxvf"
     ]
