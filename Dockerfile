@@ -57,4 +57,4 @@ COPY run.sh ./
 
 EXPOSE 10200
 
-ENTRYPOINT ["bash", "-c", "exec run.sh \"${@}\"", "--"]
+ENTRYPOINT ["bash", "-c", "exec /run.sh \"${@}\"", "--"]
