@@ -40,7 +40,7 @@ RUN \
         onnxruntime-gpu \
         "wyoming-piper @ https://github.com/rhasspy/wyoming-piper/archive/refs/tags/v${WYOMING_PIPER_VERSION}.tar.gz" \
     \
-    && rm -r piper_phonemize-1.1.0-py3-none-any.whl \
+    && rm -r piper_phonemize-1.1.0-py3-none-any.whl
 
 RUN \
     && apt-get purge -y --auto-remove \
