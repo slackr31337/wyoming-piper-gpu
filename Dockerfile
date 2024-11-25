@@ -47,8 +47,9 @@ RUN \
         build-essential \
         python3-dev \
     \
-    && rm -rf /var/lib/apt/lists/* /*.deb \
-    && mkdir -p /share/piper
+    && rm -rf /var/lib/apt/lists/* \
+    && rm /*.deb \
+    && mkdir -p /share/piper && exit 0
 
 # Patch to enable CUDA arguments for piper
 COPY patch/process.py /usr/local/lib/python3.10/dist-packages/wyoming_piper/
