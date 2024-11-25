@@ -38,8 +38,8 @@ RUN \
         "wyoming-piper @ https://github.com/rhasspy/wyoming-piper/archive/refs/tags/v${WYOMING_PIPER_VERSION}.tar.gz" \
     \
     && rm -r piper_phonemize-1.1.0-py3-none-any.whl \
-    curl -L -s \
-        "https://github.com/rhasspy/piper/releases/download/v${PIPER_RELEASE}/piper_${TARGETARCH}${TARGETVARIANT}.tar.gz"|tar -zxvf - -C /usr/share \
+    && curl -L -s \
+        "https://github.com/rhasspy/piper/releases/download/v${PIPER_RELEASE}/piper_${TARGETARCH}${TARGETVARIANT}.tar.gz"|tar -zxvf - -C /usr/share
 
 # Clean up
 RUN \
