@@ -15,9 +15,7 @@ RUN \
         wget \
         curl \
         python3 \
-        python3-pip \
-    \
-    && rm -rf /var/lib/apt/lists/*
+        python3-pip
 
 RUN \
     pip3 install --no-cache-dir -U \
@@ -40,21 +38,22 @@ RUN \
         onnxruntime-gpu \
         "wyoming-piper @ https://github.com/rhasspy/wyoming-piper/archive/refs/tags/v${WYOMING_PIPER_VERSION}.tar.gz" \
     \
-    && rm -r piper_phonemize-1.1.0-py3-none-any.whl \
-    \
-    && apt-get purge -y --auto-remove \
-        build-essential \
-        python3-dev \
-    \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -r piper_phonemize-1.1.0-py3-none-any.whl
 
-# Patch to enable CUDA in piper
+# Clean up
+RUN \
+    rm -rf /var/lib/apt/lists/* \
+    && rm /*.deb \
+    && mkdir -p /share/piper
+
+# Patch to enable CUDA arguments for piper
 COPY patch/process.py /usr/local/lib/python3.10/dist-packages/wyoming_piper/
 COPY patch/__main__.py /usr/local/lib/python3.10/dist-packages/wyoming_piper/
 
 WORKDIR /
 COPY run.sh ./
+RUN chmod +x /run.sh
 
 EXPOSE 10200
 
-ENTRYPOINT ["bash", "-c", "exec /run.sh \"${@}\"", "--"]
+ENTRYPOINT ["bash", "/run.sh \"${@}\""]
