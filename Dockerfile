@@ -54,7 +54,8 @@ COPY patch/__main__.py /usr/local/lib/python3.10/dist-packages/wyoming_piper/
 
 WORKDIR /
 COPY run.sh ./
+RUN chmod +x /run.sh
 
 EXPOSE 10200
 
-ENTRYPOINT ["bash", "-c", "exec /run.sh \"${@}\"", "--"]
+ENTRYPOINT ["bash", "/run.sh \"${@}\""]
