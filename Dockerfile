@@ -5,7 +5,6 @@ WORKDIR /usr/src
 
 ARG TARGETARCH=amd64
 ARG TARGETVARIANT=
-ARG PIPER_LIB_VERSION=1.4.0
 ARG WYOMING_PIPER_VERSION='1.5.0'
 ARG PIPER_RELEASE='1.2.0'
 
@@ -38,7 +37,9 @@ RUN \
         onnxruntime-gpu \
         "wyoming-piper @ https://github.com/rhasspy/wyoming-piper/archive/refs/tags/v${WYOMING_PIPER_VERSION}.tar.gz" \
     \
-    && rm -r piper_phonemize-1.1.0-py3-none-any.whl
+    && rm -r piper_phonemize-1.1.0-py3-none-any.whl \
+    curl -L -s \
+        "https://github.com/rhasspy/piper/releases/download/v${PIPER_RELEASE}/piper_${TARGETARCH}${TARGETVARIANT}.tar.gz"|tar -zxvf - -C /usr/share \
 
 # Clean up
 RUN \
@@ -56,4 +57,4 @@ RUN chmod +x /run.sh
 
 EXPOSE 10200
 
-ENTRYPOINT ["bash", "/run.sh \"${@}\""]
+ENTRYPOINT ["bash", "/run.sh"]
