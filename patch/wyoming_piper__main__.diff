@@ -13,4 +13,3 @@
 +        "--espeak-data-dir",
 +        help="Path to espeak-ng data directory"
 +    )
-
