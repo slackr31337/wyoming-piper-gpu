@@ -13,9 +13,7 @@
 +        "--espeak-data-dir",
 +        help="Path to espeak-ng data directory"
 +    )
-     parser.add_argument("--debug", action="store_true", help="Log DEBUG messages")
-     args = parser.parse_args()
- 
++
  
 --- process.py	2025-01-04 17:48:27.653862810 +0000
 +++ process.py.patched	2025-01-04 17:52:48.494362993 +0000
@@ -30,7 +28,3 @@
 +                piper_args.extend(["--debug"])
 +                piper_args.extend(["--cuda"])
 +
-             _LOGGER.debug(
-                 "Starting piper process: %s args=%s", self.args.piper, piper_args
-             )
-
