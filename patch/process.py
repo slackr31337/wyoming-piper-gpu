@@ -148,8 +148,13 @@ class PiperProcessManager:
             if self.args.noise_w:
                 piper_args.extend(["--noise-w", str(self.args.noise_w)])
 
+            if self.args.espeak_data_dir:
+                piper_args.extend(["--espeak_data", str(self.args.espeak_data_dir)])
+
             if self.args.cuda:
+                piper_args.extend(["--debug"])
                 piper_args.extend(["--cuda"])
+                piper_args.extend(["--use-cuda"])
 
             _LOGGER.debug(
                 "Starting piper process: %s args=%s", self.args.piper, piper_args
