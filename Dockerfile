@@ -12,16 +12,24 @@ RUN \
     apt-get install -y --no-install-recommends \
         wget \
         curl \
+        patch \
         python3 \
+        python3-dev \
+        python3-venv \
         python3-pip
 
 RUN \
+    mkdir -p /app /data /share/piper &&\
+    python3 -m venv /app &&\
+    . /app/bin/activate &&\
     pip3 install --no-cache-dir \
         torch
 
 RUN \
+    . /app/bin/activate && \
     pip3 install --no-cache-dir --force-reinstall --no-deps\
         "piper-tts==${PIPER_RELEASE}" \
+        piper_phonemize==1.1.0 \
         &&\
     \
     pip3 install --no-cache-dir\
@@ -43,20 +51,20 @@ RUN \
     # mv piper_phonemize-1.1.0-cp310-cp310-manylinux_2_28_x86_64.whl piper_phonemize-1.1.0-py3-none-any.whl &&\
     # rm -r piper_phonemize-1.1.0-py3-none-any.whl &&\
 
+# Patch to enable CUDA arguments for piper
+COPY patch/wyoming-piper_cuda.patch /tmp/
+RUN \
+    cd /app/lib/python3.10/dist-packages/wyoming_piper/ &&\
+    patch -p0 < /tmp/wyoming-piper_cuda.patch
+
 # Clean up
 RUN \
-    rm -rf /var/lib/apt/lists/* &&\
-    rm /*.deb &&\
-    mkdir -p /share/piper
+    rm -rf /var/lib/apt/lists/* /*.deb /tmp/*
 
-# Patch to enable CUDA arguments for piper
-COPY patch/process.py /usr/local/lib/python3.10/dist-packages/wyoming_piper/
-COPY patch/__main__.py /usr/local/lib/python3.10/dist-packages/wyoming_piper/
-
-WORKDIR /
-COPY run.sh ./
-RUN chmod +x /run.sh
+WORKDIR /app
+COPY run.sh /app/
+RUN chmod +x /app/run.sh
 
 EXPOSE 10200
 
-ENTRYPOINT ["bash", "/run.sh"]
+ENTRYPOINT ["bash", "/app/run.sh"]
