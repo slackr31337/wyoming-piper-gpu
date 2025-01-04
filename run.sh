@@ -8,5 +8,4 @@ source /app/bin/activate
     --cuda \
     --uri 'tcp://0.0.0.0:10200' \
     --data-dir /data \
-    --data-dir /share/piper \
     --download-dir /data --debug "$@"
