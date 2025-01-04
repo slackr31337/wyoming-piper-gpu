@@ -22,6 +22,7 @@ RUN \
     mkdir -p /app /data &&\
     python3 -m venv /app &&\
     . /app/bin/activate &&\
+    pip3 install --no-cache-dir --upgrade pip setuptools wheel &&\
     pip3 install --no-cache-dir \
         torch
 
@@ -54,7 +55,6 @@ RUN \
 # Patch to enable CUDA arguments for piper
 COPY patch/wyoming-piper_cuda.patch /tmp/
 RUN \
-    ls -l /app/lib; ls -l /app/lib/* &&\
     cd /app/lib/python3.10/site-packages/wyoming_piper/ &&\
     patch -p0 < /tmp/wyoming-piper_cuda.patch
 
