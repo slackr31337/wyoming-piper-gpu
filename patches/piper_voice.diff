@@ -1,0 +1,11 @@
+--- voice.py	2025-01-04 19:49:49.000000000 +0000
++++ voice.patched	2025-01-04 21:54:21.970873501 +0000
+@@ -41,7 +41,7 @@
+                 sess_options=onnxruntime.SessionOptions(),
+                 providers=["CPUExecutionProvider"]
+                 if not use_cuda
+-                else ["CUDAExecutionProvider"],
++                else [("CUDAExecutionProvider", {"cudnn_conv_algo_search": "HEURISTIC"})], 
+             ),
+         )
+ 
