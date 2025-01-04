@@ -19,7 +19,7 @@ RUN \
         python3-pip
 
 RUN \
-    mkdir -p /app /data /share/piper &&\
+    mkdir -p /app /data &&\
     python3 -m venv /app &&\
     . /app/bin/activate &&\
     pip3 install --no-cache-dir \
