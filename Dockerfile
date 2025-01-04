@@ -65,8 +65,6 @@ RUN \
 RUN \
     rm -rf /root/.cache/pip /var/lib/apt/lists/* /tmp/*
 
-# COPY tests/* /app/tests/
-
 WORKDIR /app
 COPY run.sh /app/
 RUN chmod +x /app/run.sh
