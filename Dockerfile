@@ -54,7 +54,7 @@ COPY patches/* /tmp/
 RUN \
     cd /app/lib/python3.10/site-packages/wyoming_piper/;\
     for file in /tmp/wyoming_piper*.diff;do patch -p0 --forward < $file;done;\
-    cd /app/lib/python3.10/site-packages/piper;\
+    cd /app/lib/python3.10/site-packages/piper/;\
     for file in /tmp/piper*.diff;do patch -p0 --forward < $file;done;\
     true
 
