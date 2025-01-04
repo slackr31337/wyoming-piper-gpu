@@ -57,9 +57,8 @@ RUN \
 COPY patch/* /tmp/
 RUN \
     cd /app/lib/python3.10/site-packages/wyoming_piper/;\
-    patch -p0 --forward < /tmp/__main__.py.diff;\
-    patch -p0 --forward < /tmp/process.py.diff;\
-    patch -p0 --forward < /tmp/handler.py.diff || true
+    for file in /tmp/*.diff;do patch -p0 --forward < $file;done;\
+    true
 
 # Clean up
 RUN \
