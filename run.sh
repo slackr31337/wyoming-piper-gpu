@@ -4,9 +4,10 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib/python3.10/site-packages/nvidia
 
 # Run wyoming-piper server
 source /app/bin/activate
+
 /app/bin/python3 -m wyoming_piper \
     --piper '/app/bin/piper' \
-    --cuda \
     --uri 'tcp://0.0.0.0:10200' \
     --data-dir /data \
-    --download-dir /data --debug "$@"
+    --download-dir /data \
+    --cuda "$@"
