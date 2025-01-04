@@ -34,7 +34,7 @@ RUN \
 
 RUN \
     . /app/bin/activate && \
-    /app/bin/python3 -m pip install --no-cache-dir --force-reinstall --no-deps\
+    /app/bin/python3 -m pip install --no-cache-dir --no-deps\
         "piper-tts==${PIPER_RELEASE}" \
         &&\
     \
@@ -46,7 +46,7 @@ RUN \
         onnxruntime-gpu \
         &&\
     \
-    /app/bin/python3 -m pip install --force-reinstall --no-cache-dir\
+    /app/bin/python3 -m pip install --no-cache-dir\
         "wyoming-piper==${WYOMING_PIPER_VERSION}"\
         &&\
     \
