@@ -22,7 +22,7 @@ RUN \
         python3-pip
 
 RUN \
-    mkdir -p /data /app/tests &&\
+    mkdir -p /data /app &&\
     python3 -m venv /app &&\
     . /app/bin/activate &&\
     /app/bin/python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
@@ -53,7 +53,7 @@ RUN \
 COPY patch/* /tmp/
 RUN \
     cd /app/lib/python3.10/site-packages/wyoming_piper/;\
-    for file in /tmp/*.diff;do patch -p0 --forward < $file;done;\
+    for file in /tmp/wyoming_piper*.diff;do patch -p0 --forward < $file;done;\
     true
 
 # Clean up
