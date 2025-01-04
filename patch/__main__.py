@@ -71,6 +71,10 @@ async def main() -> None:
         action="store_true",
         help="Use GPU"
     )
+    parser.add_argument(
+        "--espeak-data-dir",
+        help="Path to espeak-ng data directory"
+    )
     #
     parser.add_argument("--debug", action="store_true", help="Log DEBUG messages")
     parser.add_argument(
