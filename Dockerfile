@@ -56,7 +56,7 @@ RUN \
 COPY patch/wyoming-piper_cuda.patch /tmp/
 RUN \
     cd /app/lib/python3.10/site-packages/wyoming_piper/ &&\
-    patch -p0 < /tmp/wyoming-piper_cuda.patch
+    patch -p0 --forward < /tmp/wyoming-piper_cuda.patch || true
 
 # Clean up
 RUN \
