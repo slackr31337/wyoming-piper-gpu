@@ -1,10 +1,17 @@
 {
     "cSpell.words": [
+        "cublas",
         "CUDA",
+        "cudnn",
+        "cufft",
+        "curand",
         "manylinux",
+        "nvrtc",
         "onnxruntime",
         "phonemize",
         "setuptools",
+        "slackr",
+        "venv",
         "zxvf"
     ]
 }
