@@ -4,8 +4,9 @@ WORKDIR /usr/src
 
 ARG TARGETARCH=amd64
 ARG TARGETVARIANT=
-ARG WYOMING_PIPER_VERSION='1.4.0'
-ARG PIPER_RELEASE='1.2.0'
+ARG WYOMING_PIPER_VERSION="1.4.0"
+ARG PIPER_RELEASE="1.2.0"
+ARG PIPER_URL="https://github.com/rhasspy/piper/releases/download/v${PIPER_RELEASE}/piper_${TARGETARCH}${TARGETVARIANT}.tar.gz"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -45,32 +46,26 @@ RUN \
         onnxruntime-gpu \
         &&\
     \
-    /app/bin/python3 -m pip install --no-cache-dir\
+    /app/bin/python3 -m pip install --force-reinstall --no-cache-dir\
         "wyoming-piper==${WYOMING_PIPER_VERSION}"\
         &&\
     \
-    wget \
-        "https://github.com/rhasspy/piper/releases/download/v${PIPER_RELEASE}/piper_${TARGETARCH}${TARGETVARIANT}.tar.gz" -O -|tar -zxvf - -C /usr/share
+    wget "${PIPER_URL}" -O -|tar -zxvf - -C /app
 
-    # pip3 install --no-cache-dir --force-reinstall --no-deps\
-    #    piper_phonemize-1.1.0-py3-none-any.whl &&\
-    #    \
-    #    "wyoming-piper @ https://github.com/rhasspy/wyoming-piper/archive/refs/tags/v${WYOMING_PIPER_VERSION}.tar.gz" 
-    # wget https://github.com/rhasspy/piper-phonemize/releases/download/v1.1.0/piper_phonemize-1.1.0-cp310-cp310-manylinux_2_28_x86_64.whl &&\
-    # mv piper_phonemize-1.1.0-cp310-cp310-manylinux_2_28_x86_64.whl piper_phonemize-1.1.0-py3-none-any.whl &&\
-    # rm -r piper_phonemize-1.1.0-py3-none-any.whl &&\
 
 # Patch to enable CUDA arguments for piper
-COPY patch/wyoming-piper_cuda.patch /tmp/
+COPY patch/* /tmp/
 RUN \
     cd /app/lib/python3.10/site-packages/wyoming_piper/;\
-    patch -p0 --forward < /tmp/wyoming-piper_cuda.patch || true
+    patch -p0 --forward < /tmp/__main__.py.diff;\
+    patch -p0 --forward < /tmp/process.py.diff;\
+    patch -p0 --forward < /tmp/handler.py.diff || true
 
 # Clean up
 RUN \
     rm -rf /root/.cache/pip /var/lib/apt/lists/* /tmp/*
 
-COPY tests/* /app/tests/
+# COPY tests/* /app/tests/
 
 WORKDIR /app
 COPY run.sh /app/
