@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/python3.10/dist-packages/nvidia/cudnn/lib/:/usr/local/lib/python3.10/dist-packages/nvidia/cublas/lib:/usr/local/lib/python3.10/dist-packages/nvidia/curand/lib/:/usr/local/lib/python3.10/dist-packages/nvidia/cufft/lib/:/usr/local/lib/python3.10/dist-packages/nvidia/cuda_runtime/lib/:/usr/local/lib/python3.10/dist-packages/nvidia/cuda_nvrtc/lib/
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib/python3.10/site-packages/nvidia/cudnn/lib/:/app/lib/python3.10/site-packages/nvidia/cublas/lib:/app/lib/python3.10/site-packages/nvidia/curand/lib/:/app/lib/python3.10/site-packages/nvidia/cufft/lib/:/app/lib/python3.10/site-packages/nvidia/cuda_runtime/lib/:/app/lib/python3.10/site-packages/nvidia/cuda_nvrtc/lib/
 
-PIPER_CPU="/usr/share/piper/piper"
-PIPER_GPU="/usr/local/bin/piper"
-
+# Run wyoming-piper server
 source /app/bin/activate
 /app/bin/python3 -m wyoming_piper \
-    --piper '/usr/local/bin/piper' \
+    --piper '/app/bin/piper' \
     --cuda \
     --uri 'tcp://0.0.0.0:10200' \
     --data-dir /data \
