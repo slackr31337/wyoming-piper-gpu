@@ -38,7 +38,7 @@ RUN \
         "piper-tts==${PIPER_RELEASE}" \
         &&\
     \
-    /app/bin/python3 -m pip install --no-cache-dir \
+    /app/bin/python3 -m pip install --no-cache-dir\
         piper_phonemize==1.1.0 \
         &&\
     \
