@@ -55,7 +55,7 @@ RUN \
 COPY patch/wyoming-piper_cuda.patch /tmp/
 RUN \
     ls -l /app/lib; ls -l /app/lib/* &&\
-    cd /app/lib/python3.10/dist-packages/wyoming_piper/ &&\
+    cd /app/lib/python3.10/site-packages/wyoming_piper/ &&\
     patch -p0 < /tmp/wyoming-piper_cuda.patch
 
 # Clean up
