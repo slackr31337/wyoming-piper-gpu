@@ -11,6 +11,7 @@
         "phonemize",
         "setuptools",
         "slackr",
+        "venv",
         "zxvf"
     ]
 }
