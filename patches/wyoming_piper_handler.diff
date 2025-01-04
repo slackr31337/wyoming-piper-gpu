@@ -5,6 +5,6 @@
              _LOGGER.debug("input: %s", input_obj)
              piper_proc.proc.stdin.write(
 -                (json.dumps(input_obj, ensure_ascii=False) + "\n").encode()
-+                (f{text}"\n").encode()
++                (f"{text}\n").encode()
              )
              await piper_proc.proc.stdin.drain()
