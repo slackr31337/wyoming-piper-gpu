@@ -68,7 +68,7 @@ RUN \
 
 # Clean up
 RUN \
-    rm -rf /var/lib/apt/lists/* /tmp/*
+    rm -rf /root/.cache/pip /var/lib/apt/lists/* /tmp/*
 
 COPY tests/* /app/tests/
 
