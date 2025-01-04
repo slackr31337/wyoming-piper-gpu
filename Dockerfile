@@ -7,6 +7,8 @@ ARG TARGETVARIANT=
 ARG WYOMING_PIPER_VERSION='1.4.0'
 ARG PIPER_RELEASE='1.2.0'
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN \
     apt-get update &&\
     apt-get install -y --no-install-recommends \
@@ -19,12 +21,16 @@ RUN \
         python3-pip
 
 RUN \
-    mkdir -p /app /data &&\
+    mkdir -p /data /app/tests &&\
     python3 -m venv /app &&\
     . /app/bin/activate &&\
     /app/bin/python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
     /app/bin/python3 -m pip install --no-cache-dir \
-        torch
+        torch \
+        py-cpuinfo \
+        psutil \
+        cpuinfo
+        # tensorflow[and-cuda] \
 
 RUN \
     . /app/bin/activate && \
@@ -64,6 +70,8 @@ RUN \
 # Clean up
 RUN \
     rm -rf /var/lib/apt/lists/* /tmp/*
+
+COPY tests/* /app/tests/
 
 WORKDIR /app
 COPY run.sh /app/
