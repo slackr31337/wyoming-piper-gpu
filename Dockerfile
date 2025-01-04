@@ -60,7 +60,7 @@ RUN \
 
 # Clean up
 RUN \
-    rm -rf /var/lib/apt/lists/* /*.deb /tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/*
 
 WORKDIR /app
 COPY run.sh /app/
