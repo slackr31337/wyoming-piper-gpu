@@ -28,8 +28,7 @@ RUN \
     /app/bin/python3 -m pip install --no-cache-dir \
         torch \
         py-cpuinfo \
-        psutil \
-        cpuinfo
+        psutil 
         # tensorflow[and-cuda] \
 
 RUN \
