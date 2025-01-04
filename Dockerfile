@@ -22,22 +22,25 @@ RUN \
     mkdir -p /app /data &&\
     python3 -m venv /app &&\
     . /app/bin/activate &&\
-    pip3 install --no-cache-dir --upgrade pip setuptools wheel &&\
-    pip3 install --no-cache-dir \
+    /app/bin/python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
+    /app/bin/python3 -m pip install --no-cache-dir \
         torch
 
 RUN \
     . /app/bin/activate && \
-    pip3 install --no-cache-dir --force-reinstall --no-deps\
+    /app/bin/python3 -m pip install --no-cache-dir --force-reinstall --no-deps\
         "piper-tts==${PIPER_RELEASE}" \
+        &&\
+    \
+    /app/bin/python3 -m pip install --no-cache-dir \
         piper_phonemize==1.1.0 \
         &&\
     \
-    pip3 install --no-cache-dir\
+    /app/bin/python3 -m pip install --no-cache-dir\
         onnxruntime-gpu \
         &&\
     \
-    pip3 install --no-cache-dir\
+    /app/bin/python3 -m pip install --no-cache-dir\
         "wyoming-piper==${WYOMING_PIPER_VERSION}"\
         &&\
     \
@@ -55,7 +58,7 @@ RUN \
 # Patch to enable CUDA arguments for piper
 COPY patch/wyoming-piper_cuda.patch /tmp/
 RUN \
-    cd /app/lib/python3.10/site-packages/wyoming_piper/ &&\
+    cd /app/lib/python3.10/site-packages/wyoming_piper/;\
     patch -p0 --forward < /tmp/wyoming-piper_cuda.patch || true
 
 # Clean up
