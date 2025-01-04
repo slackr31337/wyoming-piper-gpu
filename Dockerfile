@@ -26,24 +26,20 @@ RUN \
     python3 -m venv /app &&\
     . /app/bin/activate &&\
     /app/bin/python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
-    /app/bin/python3 -m pip install --no-cache-dir \
-        torch \
-        py-cpuinfo \
-        psutil 
-        # tensorflow[and-cuda] \
+    /app/bin/python3 -m pip install --no-cache-dir torch
 
 RUN \
     . /app/bin/activate && \
     /app/bin/python3 -m pip install --no-cache-dir --no-deps\
-        "piper-tts==${PIPER_RELEASE}" \
+        "piper-tts==${PIPER_RELEASE}"\
         &&\
     \
     /app/bin/python3 -m pip install --no-cache-dir\
-        piper_phonemize==1.1.0 \
+        piper_phonemize==1.1.0\
         &&\
     \
     /app/bin/python3 -m pip install --no-cache-dir\
-        onnxruntime-gpu \
+        onnxruntime-gpu\
         &&\
     \
     /app/bin/python3 -m pip install --no-cache-dir\
