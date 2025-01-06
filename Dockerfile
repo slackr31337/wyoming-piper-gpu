@@ -3,7 +3,7 @@ FROM nvidia/cuda:12.2.2-base-ubuntu22.04
 WORKDIR /usr/src
 
 ARG TARGETARCH=linux_x86_64
-ARG WYOMING_PIPER_VERSION="1.4.0"
+ARG WYOMING_PIPER_VERSION="1.5.0"
 ARG PIPER_RELEASE="1.2.0"
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -25,13 +25,7 @@ RUN \
 RUN \
     mkdir -p /data /app &&\
     \
-    python3 -m venv /app &&\
-    \
-    . /app/bin/activate &&\
-    \
-    /app/bin/python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
-    \
-    /app/bin/python3 -m pip install --no-cache-dir torch
+    python3 -m venv /app
 
 RUN \
     . /app/bin/activate && \
@@ -40,7 +34,7 @@ RUN \
         &&\
     \
     /app/bin/python3 -m pip install --no-cache-dir \
-        "wyoming-piper==${WYOMING_PIPER_VERSION}" \
+        "wyoming-piper @ https://github.com/rhasspy/wyoming-piper/archive/refs/tags/v${WYOMING_PIPER_VERSION}.tar.gz" \
         &&\
     \
     PIPER_VERSION=$(wget "https://api.github.com/repos/rhasspy/piper/releases/latest" -O -|awk '/tag_name/{print $4;exit}' FS='[""]') && \
@@ -49,11 +43,10 @@ RUN \
     
 # Patch to enable CUDA arguments for piper
 RUN \
-    cd /app/lib/python3.10/site-packages/wyoming_piper/;\
-    for file in /tmp/wyoming_piper*.diff;do patch -p0 --forward < $file;done; &&\
-    \
-    cd /app/lib/python3.10/site-packages/piper/;\
-    for file in /tmp/piper*.diff;do patch -p0 --forward < $file;done;\
+    cd /app/lib/python3.10/site-packages/wyoming_piper/; \
+    for file in /tmp/wyoming_piper*.diff;do patch -p0 --forward < $file;done; \
+    cd /app/lib/python3.10/site-packages/piper/; \
+    for file in /tmp/piper*.diff;do patch -p0 --forward < $file;done; \
     true
 
 # Clean up
