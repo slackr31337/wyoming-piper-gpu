@@ -2,19 +2,20 @@ FROM nvidia/cuda:12.2.2-base-ubuntu22.04
 
 WORKDIR /usr/src
 
-ARG TARGETARCH=amd64
-ARG TARGETVARIANT=
-ARG WYOMING_PIPER_VERSION="1.4.0"
+ARG TARGETARCH=linux_x86_64
+ARG WYOMING_PIPER_VERSION="1.5.0"
 ARG PIPER_RELEASE="1.2.0"
-ARG PIPER_URL="https://github.com/rhasspy/piper/releases/download/v${PIPER_RELEASE}/piper_${TARGETARCH}${TARGETVARIANT}.tar.gz"
 
 ENV DEBIAN_FRONTEND=noninteractive
+
+COPY patches/* /tmp/
 
 RUN \
     apt-get update &&\
     apt-get install -y --no-install-recommends \
         wget \
         curl \
+        vim \
         patch \
         python3 \
         python3-dev \
@@ -23,48 +24,36 @@ RUN \
 
 RUN \
     mkdir -p /data /app &&\
-    python3 -m venv /app &&\
-    . /app/bin/activate &&\
-    /app/bin/python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
-    /app/bin/python3 -m pip install --no-cache-dir torch
+    \
+    python3 -m venv /app
 
 RUN \
     . /app/bin/activate && \
-    /app/bin/python3 -m pip install --no-cache-dir --no-deps\
-        "piper-tts==${PIPER_RELEASE}"\
+    /app/bin/python3 -m pip install --no-cache-dir --no-deps \
+        "piper-tts==${PIPER_RELEASE}" \
         &&\
     \
-    /app/bin/python3 -m pip install --no-cache-dir\
-        piper_phonemize==1.1.0\
+    /app/bin/python3 -m pip install --no-cache-dir \
+        "wyoming-piper @ https://github.com/rhasspy/wyoming-piper/archive/refs/tags/v${WYOMING_PIPER_VERSION}.tar.gz" \
         &&\
     \
-    /app/bin/python3 -m pip install --no-cache-dir\
-        onnxruntime-gpu\
-        &&\
+    PIPER_VERSION=$(wget "https://api.github.com/repos/rhasspy/piper/releases/latest" -O -|awk '/tag_name/{print $4;exit}' FS='[""]') && \
     \
-    /app/bin/python3 -m pip install --no-cache-dir\
-        "wyoming-piper==${WYOMING_PIPER_VERSION}"\
-        &&\
-    \
-    wget "${PIPER_URL}" -O -|tar -zxvf - -C /app
-
-
+    wget "https://github.com/rhasspy/piper/releases/download/${PIPER_VERSION}/piper_${TARGETARCH}.tar.gz" -O -|tar -zxvf - -C /usr/share
+    
 # Patch to enable CUDA arguments for piper
-COPY patches/* /tmp/
 RUN \
-    cd /app/lib/python3.10/site-packages/wyoming_piper/;\
-    for file in /tmp/wyoming_piper*.diff;do patch -p0 --forward < $file;done;\
-    cd /app/lib/python3.10/site-packages/piper/;\
-    for file in /tmp/piper*.diff;do patch -p0 --forward < $file;done;\
+    cd /app/lib/python3.10/site-packages/wyoming_piper/; \
+    for file in /tmp/wyoming_piper*.diff;do patch -p0 --forward < $file;done; \
+    cd /app/lib/python3.10/site-packages/piper/; \
+    for file in /tmp/piper*.diff;do patch -p0 --forward < $file;done; \
     true
 
 # Clean up
-RUN \
-    rm -rf /root/.cache/pip /var/lib/apt/lists/* /tmp/*
+RUN rm -rf /root/.cache/pip /var/lib/apt/lists/* /tmp/*
 
 WORKDIR /app
 COPY run.sh /app/
-RUN chmod +x /app/run.sh
 
 EXPOSE 10200
 
