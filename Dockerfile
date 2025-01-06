@@ -39,7 +39,7 @@ RUN \
     \
     PIPER_VERSION=$(wget "https://api.github.com/repos/rhasspy/piper/releases/latest" -O -|awk '/tag_name/{print $4;exit}' FS='[""]') && \
     \
-    wget "https://github.com/rhasspy/piper/releases/download/${PIPER_VERSION}/piper_${TARGETARCH}.tar.gz" -O -|tar -zxvf - -C /app
+    wget "https://github.com/rhasspy/piper/releases/download/${PIPER_VERSION}/piper_${TARGETARCH}.tar.gz" -O -|tar -zxvf - -C /usr/share
     
 # Patch to enable CUDA arguments for piper
 RUN \
