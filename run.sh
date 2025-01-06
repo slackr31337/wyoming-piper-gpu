@@ -6,7 +6,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib/python3.10/site-packages/nvidia
 source /app/bin/activate
 
 /app/bin/python3 -m wyoming_piper \
-    --piper '/app/piper/piper' \
+    --piper '/usr/share/piper/piper' \
     --uri 'tcp://0.0.0.0:10200' \
     --length-scale "${PIPER_LENGTH:-1.0}" \
     --noise-scale "${PIPER_NOISE:-0.667}" \
