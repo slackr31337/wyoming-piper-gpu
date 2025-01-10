@@ -7,8 +7,8 @@
 +            if self.args.espeak_data_dir:
 +                piper_args.extend(["--espeak_data", str(self.args.espeak_data_dir)])
 +
-+            if self.args.cuda:
-+                piper_args.extend(["--cuda"])
++            if self.args.use_cuda:
++                piper_args.extend(["--use-cuda"])
 +
              _LOGGER.debug(
                  "Starting piper process: %s args=%s", self.args.piper, piper_args
