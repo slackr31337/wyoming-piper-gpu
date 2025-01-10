@@ -5,7 +5,7 @@
      )
      #
 +    parser.add_argument(
-+        "--cuda",
++        "--use-cuda",
 +        action="store_true",
 +        help="Use GPU"
 +    )

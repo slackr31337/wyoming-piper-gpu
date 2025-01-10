@@ -1,14 +1,10 @@
-FROM nvidia/cuda:12.2.2-base-ubuntu22.04
+##########################################
+FROM nvidia/cuda:12.3.2-cudnn9-runtime-ubuntu22.04 AS build
 
-WORKDIR /usr/src
+ARG PIPER_BRANCH="2023.11.14-2"
 
-ARG TARGETARCH=linux_x86_64
-ARG WYOMING_PIPER_VERSION="1.5.0"
-ARG PIPER_RELEASE="1.2.0"
-
+ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
-
-COPY patches/* /tmp/
 
 RUN \
     apt-get update &&\
@@ -16,21 +12,61 @@ RUN \
         wget \
         curl \
         vim \
+        git \
+        build-essential \
+        cmake \
+        ca-certificates \
+        curl \
+        pkg-config
+
+WORKDIR /build
+
+RUN \
+    git clone -b "${PIPER_BRANCH}" https://github.com/rhasspy/piper.git /build
+
+RUN cmake -Bbuild -DCMAKE_INSTALL_PREFIX=install
+RUN cmake --build build --config Release
+RUN cmake --install build
+
+WORKDIR /dist
+RUN mkdir -p piper && \
+    cp -dR /build/install/* ./piper/
+
+RUN /dist/piper/piper --help
+
+##########################################
+FROM nvidia/cuda:12.3.2-cudnn9-runtime-ubuntu22.04 AS dist
+
+ARG TARGETARCH=linux_x86_64
+ARG WYOMING_PIPER_VERSION="1.5.0"
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONUNBUFFERED=1
+
+RUN \
+    apt-get update && apt-get upgrade -y &&\
+    apt-get install -y --no-install-recommends \
+        wget \
+        curl \
+        vim \
+        git \
         patch \
         python3 \
         python3-dev \
         python3-venv \
-        python3-pip
+        python3-pip 
 
 RUN \
-    mkdir -p /data /app &&\
-    \
+    mkdir -p /data /app/piper &&\
+    ln -s /app/piper /usr/share/espeak-ng-data &&\
     python3 -m venv /app
 
+COPY --from=build /dist/piper/* /app/piper/
+COPY requirements.txt /app/
 RUN \
     . /app/bin/activate && \
     /app/bin/python3 -m pip install --no-cache-dir --no-deps \
-        "piper-tts==${PIPER_RELEASE}" \
+        -r /app/requirements.txt \
         &&\
     \
     /app/bin/python3 -m pip install --no-cache-dir \
@@ -42,12 +78,12 @@ RUN \
     wget "https://github.com/rhasspy/piper/releases/download/${PIPER_VERSION}/piper_${TARGETARCH}.tar.gz" -O -|tar -zxvf - -C /usr/share
     
 # Patch to enable CUDA arguments for piper
+COPY patches/* /tmp/
 RUN \
     cd /app/lib/python3.10/site-packages/wyoming_piper/; \
     for file in /tmp/wyoming_piper*.diff;do patch -p0 --forward < $file;done; \
-    cd /app/lib/python3.10/site-packages/piper/; \
-    for file in /tmp/piper*.diff;do patch -p0 --forward < $file;done; \
-    true
+    cp /app/lib/python3.10/site-packages/onnxruntime/capi/libonnxruntime* /app/lib/ &&\
+    mv /app/piper/lib*.so* /app/lib/ 
 
 # Clean up
 RUN rm -rf /root/.cache/pip /var/lib/apt/lists/* /tmp/*
