@@ -70,11 +70,11 @@ RUN cmake -Bbuild -DCMAKE_INSTALL_PREFIX=install -DPIPER_PHONEMIZE_DIR=/app
 RUN cmake --build build --config Release
 RUN cmake --install build
 
+RUN /work/install/piper --help
+
 RUN mkdir -p /app/piper && \
     mv /work/install/lib*.so* /app/lib/ &&\
     cp -rf /work/install/* /app/piper/
-
-RUN /app/piper/piper --help
 
 RUN \
     cd /app/lib/python3.10/site-packages/wyoming_piper/; \
