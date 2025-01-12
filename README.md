@@ -9,7 +9,8 @@ https://github.com/rhasspy/wyoming-piper
 
 docker pull ghcr.io/slackr31337/wyoming-piper-gpu:latest
 
-Use environment variable to set piper voice
+
+# Use environment variable to set piper voice
 
 PIPER_VOICE="en_US-lessac-medium"
 
