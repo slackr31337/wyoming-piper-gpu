@@ -54,6 +54,7 @@ RUN \
 FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04 AS dist
 
 ENV PYTHONUNBUFFERED=1
+ENV PATH="/bin:$PATH"
 
 RUN \
     mkdir -p /data /app &&\
@@ -67,10 +68,10 @@ RUN \
         ca-certificates
 
 RUN rm -rf /root/.cache/pip /var/lib/apt/lists/*
+# RUN ln -s /app/piper/espeak-ng-data /usr/share/espeak-ng-data
 
 WORKDIR /app
 COPY --from=build /app .
-# RUN ln -s /app/piper/espeak-ng-data /usr/share/espeak-ng-data
 
 EXPOSE 10200
 
