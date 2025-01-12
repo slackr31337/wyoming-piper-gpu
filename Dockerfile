@@ -28,7 +28,7 @@ RUN \
 RUN \
     mkdir -p /app/lib &&\
     cd /tmp && wget -q https://github.com/microsoft/onnxruntime/releases/download/v${ONNXRUNTIME_VERSION}/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}.tgz &&\
-    tar xzvf onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}.tgz &&\
+    tar xzf onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}.tgz &&\
     cp -rfv /tmp/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}/lib/lib* /app/lib &&\
     cp -rfv /tmp/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}/include/* /usr/local/include/
 
