@@ -26,6 +26,7 @@ RUN \
 WORKDIR /app
 
 COPY run.sh .
+COPY patches/* /tmp/
 
 RUN \
     mkdir -p /app/lib &&\
