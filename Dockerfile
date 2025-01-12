@@ -15,14 +15,11 @@ RUN \
         wget \
         curl \
         vim \
-        git \
         patch \
         python3 \
         python3-dev \
         python3-venv \
         python3-pip \
-        build-essential \
-        cmake \
         ca-certificates \
         pkg-config
 
@@ -32,16 +29,14 @@ COPY run.sh .
 
 RUN \
     mkdir -p /app/lib &&\
-    \
     python3 -m venv /app &&\
-    \
-    source /app/bin/activate && \
-    \
-    wget -q https://github.com/rhasspy/piper-phonemize/releases/download/v${PIPER_PHONEMIZE_VERSION}/piper_phonemize-${PIPER_PHONEMIZE_VERSION}-cp310-cp310-manylinux_2_28_x86_64.whl \
-        -O /tmp/piper_phonemize-${PIPER_PHONEMIZE_VERSION}-py3-none-any.whl &&\
+    . /app/bin/activate && \
     \
     /app/bin/python3 -m pip install --no-cache-dir --force-reinstall --no-deps \
         "piper-tts==${PIPER_VERSION}" &&\
+    \
+    wget -q https://github.com/rhasspy/piper-phonemize/releases/download/v${PIPER_PHONEMIZE_VERSION}/piper_phonemize-${PIPER_PHONEMIZE_VERSION}-cp310-cp310-manylinux_2_28_x86_64.whl \
+        -O /tmp/piper_phonemize-${PIPER_PHONEMIZE_VERSION}-py3-none-any.whl &&\
     \
     /app/bin/python3 -m pip install --no-cache-dir --force-reinstall --no-deps \
         piper_phonemize-1${PIPER_PHONEMIZE_VERSION}py3-none-any.whl &&\
@@ -76,8 +71,7 @@ RUN rm -rf /root/.cache/pip /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY --from=build /app .
-
-RUN ln -s /app/piper/espeak-ng-data /usr/share/espeak-ng-data
+# RUN ln -s /app/piper/espeak-ng-data /usr/share/espeak-ng-data
 
 EXPOSE 10200
 
