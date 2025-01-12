@@ -36,9 +36,9 @@ WORKDIR /build
 RUN \
     git clone https://github.com/rhasspy/piper.git /build
 
-RUN ONNXRUNTIME_DIR=/app/lib cmake -Bbuild -DCMAKE_INSTALL_PREFIX=install
-RUN ONNXRUNTIME_DIR=/app/lib cmake --build build --config Release
-RUN ONNXRUNTIME_DIR=/app/lib cmake --install build
+RUN ONNXRUNTIME_DIR=/app/lib ONNXRUNTIME_VERSION=${ONNXRUNTIME_VERSION} cmake -Bbuild -DCMAKE_INSTALL_PREFIX=install
+RUN ONNXRUNTIME_DIR=/app/lib ONNXRUNTIME_VERSION=${ONNXRUNTIME_VERSION} cmake --build build --config Release
+RUN ONNXRUNTIME_DIR=/app/lib ONNXRUNTIME_VERSION=${ONNXRUNTIME_VERSION} cmake --install build
 
 WORKDIR /app
 
