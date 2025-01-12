@@ -16,4 +16,6 @@ source /app/bin/activate
     --max-piper-procs "${PIPER_PROCS:-1}" \
     --data-dir /data \
     --download-dir /data \
-    --use-cuda "$@"
+    "$@"
+
+# --use-cuda crashes with onnxruntime 1.20.1
