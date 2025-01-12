@@ -5,6 +5,7 @@ ARG TARGETARCH=linux_x86_64
 ARG WYOMING_PIPER_VERSION="1.5.2"
 ARG PIPER_VERSION="1.2.0"
 ARG PIPER_PHONEMIZE_VERSION="1.1.0"
+ARG ONNXRUNTIME_VERSION="1.14.1"
 
 ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
@@ -32,7 +33,7 @@ COPY run.sh .
 COPY patches/* /tmp/
 
 RUN \
-    mkdir -p /app/lib &&\
+    mkdir -p /app/lib /app/include &&\
     python3 -m venv /app &&\
     . /app/bin/activate && \
     \
@@ -53,7 +54,13 @@ RUN \
     wget "https://github.com/rhasspy/piper/releases/download/${LATEST_PIPER_VERSION}/piper_${TARGETARCH}.tar.gz" -O -|tar -zxvf - -C /usr/share &&\
     \
     /app/bin/python3 -m pip install --no-cache-dir \
-        "wyoming-piper @ https://github.com/rhasspy/wyoming-piper/archive/refs/tags/v${WYOMING_PIPER_VERSION}.tar.gz"
+        "wyoming-piper @ https://github.com/rhasspy/wyoming-piper/archive/refs/tags/v${WYOMING_PIPER_VERSION}.tar.gz" &&\
+    \
+    cd /tmp && wget -q https://github.com/microsoft/onnxruntime/releases/download/v${ONNXRUNTIME_VERSION}/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}.tgz &&\
+    tar xzf onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}.tgz &&\
+    cp -rfv /tmp/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}/lib/lib* /app/lib &&\
+    cp -rfv /tmp/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}/include/* /app/include/
+
 
 WORKDIR /work
 
