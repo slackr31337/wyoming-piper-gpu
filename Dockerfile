@@ -57,14 +57,12 @@ ENV PYTHONUNBUFFERED=1
 
 RUN \
     mkdir -p /data /app &&\
-    apt-get update && apt-get upgrade -y &&\
+    apt-get update &&\
     apt-get install -y --no-install-recommends \
         wget \
         curl \
         vim \
         python3 \
-        python3-dev \
-        python3-venv \
         python3-pip \
         ca-certificates
 
