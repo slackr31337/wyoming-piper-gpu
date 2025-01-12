@@ -32,7 +32,7 @@ COPY run.sh .
 COPY patches/* /tmp/
 
 RUN \
-    mkdir -p /app/lib /app/share /app/include/piper-phonemize &&\
+    mkdir -p /app/lib /app/share/espeak-ng-data /app/include/piper-phonemize &&\
     python3 -m venv /app &&\
     . /app/bin/activate && \
     \
@@ -69,11 +69,11 @@ RUN cmake -Bbuild -DCMAKE_INSTALL_PREFIX=install -DPIPER_PHONEMIZE_DIR=/app
 RUN cmake --build build --config Release
 RUN cmake --install build
 
-RUN ./build/piper --help
-
 RUN mkdir -p /app/piper && \
     mv /work/install/lib*.so* /app/lib/ &&\
     cp -rf /work/install/* /app/piper/
+
+RUN ./app/piper/piper --help
 
 RUN \
     cd /app/lib/python3.10/site-packages/wyoming_piper/; \
