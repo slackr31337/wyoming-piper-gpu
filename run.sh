@@ -16,4 +16,4 @@ source /app/bin/activate
     --max-piper-procs "${PIPER_PROCS:-1}" \
     --data-dir /data \
     --download-dir /data \
-    -use-cuda "$@"
+    --use-cuda "$@"
