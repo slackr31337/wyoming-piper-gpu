@@ -1,6 +1,17 @@
---- __main__.py	2025-01-04 21:57:16.229874190 +0000
-+++ __main__.patched	2025-01-04 21:56:57.917558487 +0000
-@@ -66,6 +66,16 @@
+--- __main__.py	2025-01-12 12:08:32.699567820 -0500
++++ __main__.py.patched	2025-01-12 12:13:42.368857466 -0500
+@@ -53,6 +53,10 @@
+     parser.add_argument(
+         "--auto-punctuation", default=".?!", help="Automatically add punctuation"
+     )
++    parser.add_argument(
++        "--sentence-silence",
++        help="Seconds of silence to add after each sentence"
++    )
+     parser.add_argument("--samples-per-chunk", type=int, default=1024)
+     parser.add_argument(
+         "--max-piper-procs",
+@@ -67,6 +71,16 @@
          help="Download latest voices.json during startup",
      )
      #
@@ -15,5 +26,5 @@
 +    )
 +    #
      parser.add_argument("--debug", action="store_true", help="Log DEBUG messages")
-     args = parser.parse_args()
- 
+     parser.add_argument(
+         "--log-format", default=logging.BASIC_FORMAT, help="Format for log messages"

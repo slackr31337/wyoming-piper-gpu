@@ -1,3 +1,2 @@
 piper-tts>=1.2.0
-onnxruntime==1.14.0
-onnxruntime-gpu==1.14.0
+onnxruntime-gpu==1.20.1
