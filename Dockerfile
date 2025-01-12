@@ -10,7 +10,7 @@ ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN \
-    apt-get update && apt-get upgrade -y &&\
+    apt-get update &&\
     apt-get install -y --no-install-recommends \
         wget \
         curl \
@@ -39,7 +39,7 @@ RUN \
         -O /tmp/piper_phonemize-${PIPER_PHONEMIZE_VERSION}-py3-none-any.whl &&\
     \
     /app/bin/python3 -m pip install --no-cache-dir --force-reinstall --no-deps \
-        /tmp/piper_phonemize-1${PIPER_PHONEMIZE_VERSION}py3-none-any.whl &&\
+        /tmp/piper_phonemize-${PIPER_PHONEMIZE_VERSION}py3-none-any.whl &&\
     \
     /app/bin/python3 -m pip install --no-cache-dir \
         "wyoming-piper @ https://github.com/rhasspy/wyoming-piper/archive/refs/tags/v${WYOMING_PIPER_VERSION}.tar.gz"
