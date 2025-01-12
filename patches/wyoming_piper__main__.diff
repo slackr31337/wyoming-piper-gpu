@@ -1,6 +1,6 @@
---- __main__.py	2025-01-04 21:57:16.229874190 +0000
-+++ __main__.patched	2025-01-04 21:56:57.917558487 +0000
-@@ -66,6 +66,16 @@
+--- __main__.py 2025-01-12 12:08:32.699567820 -0500
++++ __main__.py.patched 2025-01-12 12:09:49.192874447 -0500
+@@ -67,6 +67,16 @@
          help="Download latest voices.json during startup",
      )
      #
@@ -15,5 +15,5 @@
 +    )
 +    #
      parser.add_argument("--debug", action="store_true", help="Log DEBUG messages")
-     args = parser.parse_args()
- 
+     parser.add_argument(
+         "--log-format", default=logging.BASIC_FORMAT, help="Format for log messages"
