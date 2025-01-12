@@ -26,10 +26,11 @@ RUN \
         pkg-config
 
 RUN \
-    mkdir -p /app/lib &&\
+    mkdir -p /app/lib /app/include &&\
     cd /tmp && wget -q https://github.com/microsoft/onnxruntime/releases/download/v${ONNXRUNTIME_VERSION}/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}.tgz &&\
     tar xzvf onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}.tgz &&\
-    cp -rfv /tmp/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}/lib/* /app/lib
+    cp -rfv /tmp/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}/lib/lib* /app/lib &&\
+    cp -rfv /tmp/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}/include/* /app/include/
 
 WORKDIR /build
 
