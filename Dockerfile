@@ -32,7 +32,7 @@ COPY run.sh .
 COPY patches/* /tmp/
 
 RUN \
-    mkdir -p /app/lib /app/include/piper-phonemize &&\
+    mkdir -p /app/lib /app/share /app/include/piper-phonemize &&\
     python3 -m venv /app &&\
     . /app/bin/activate && \
     \
@@ -48,13 +48,12 @@ RUN \
     wget -q https://github.com/rhasspy/piper-phonemize/releases/download/v${PIPER_PHONEMIZE_VERSION}/libpiper_phonemize-amd64.tar.gz -O -| \
     tar -zxvf - -C /app &&\
     \
+    mv /app/etc/* /app/share/ &&\
     mv /app/include/*.hpp /app/include/piper-phonemize/ &&\
     mv /app/include/cpu_provider_factory.h /app/include/piper-phonemize/ &&\
     mv /app/include/provider_options.h /app/include/piper-phonemize/ &&\
     \
-    ln -s /app/lib/python3.10/site-packages/piper_phonemize /app/share &&\
-    \
-    LATEST_PIPER_VERSION=$(wget "https://api.github.com/repos/rhasspy/piper/releases/latest" -O -|awk '/tag_name/{print $4;exit}' FS='[""]') && \
+    LATEST_PIPER_VERSION=$(wget -q "https://api.github.com/repos/rhasspy/piper/releases/latest" -O -|awk '/tag_name/{print $4;exit}' FS='[""]') && \
     \
     wget "https://github.com/rhasspy/piper/releases/download/${LATEST_PIPER_VERSION}/piper_${TARGETARCH}.tar.gz" -O -|tar -zxvf - -C /usr/share &&\
     \
