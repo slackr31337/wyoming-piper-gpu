@@ -27,6 +27,7 @@ RUN \
         pkg-config
 
 RUN \
+    mkdir -p /app/lib &&\
     cd /tmp && wget -q https://github.com/microsoft/onnxruntime/releases/download/v${ONNXRUNTIME_VERSION}/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}.tgz &&\
     tar xzvf onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}.tgz &&\
     cp -rfv /tmp/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}/lib/* /app/lib
@@ -41,7 +42,8 @@ RUN ONNXRUNTIME_DIR=/app/lib cmake --build build --config Release
 RUN ONNXRUNTIME_DIR=/app/lib cmake --install build
 
 WORKDIR /app
-RUN mkdir -p /data /app/piper &&\
+
+RUN \
     python3 -m venv /app &&\
     cp -rfv /build/install/* /app/piper/ &&\
     chmod 755 /app/piper/piper /app/piper/espeak-ng
