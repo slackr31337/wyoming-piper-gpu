@@ -91,7 +91,6 @@ RUN \
         ca-certificates
 
 RUN rm -rf /root/.cache/pip /var/lib/apt/lists/*
-# RUN ln -s /app/piper/espeak-ng-data /usr/share/espeak-ng-data
 
 WORKDIR /app
 COPY --from=build /app .
