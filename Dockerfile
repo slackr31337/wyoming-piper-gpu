@@ -32,7 +32,7 @@ COPY run.sh .
 COPY patches/* /tmp/
 
 RUN \
-    mkdir -p /app/lib /app/share/espeak-ng-data /app/include/piper-phonemize &&\
+    mkdir -p /app/lib /app/share /app/include/piper-phonemize &&\
     python3 -m venv /app &&\
     . /app/bin/activate && \
     \
@@ -49,6 +49,7 @@ RUN \
     tar -zxvf - -C /app &&\
     \
     mv /app/etc/* /app/share/ &&\
+    mv /app/lib/espeak-ng-data /app/share/ &&\
     mv /app/include/*.hpp /app/include/piper-phonemize/ &&\
     mv /app/include/cpu_provider_factory.h /app/include/piper-phonemize/ &&\
     mv /app/include/provider_options.h /app/include/piper-phonemize/ &&\
@@ -73,7 +74,7 @@ RUN mkdir -p /app/piper && \
     mv /work/install/lib*.so* /app/lib/ &&\
     cp -rf /work/install/* /app/piper/
 
-RUN ./app/piper/piper --help
+RUN /app/piper/piper --help
 
 RUN \
     cd /app/lib/python3.10/site-packages/wyoming_piper/; \
