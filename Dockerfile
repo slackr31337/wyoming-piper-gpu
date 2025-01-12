@@ -77,6 +77,11 @@ RUN mkdir -p /app/piper && \
     cp -rf /work/install/* /app/piper/
 
 RUN \
+    wget -q https://github.com/microsoft/onnxruntime/releases/download/v1.14.1/onnxruntime-linux-x64-gpu-1.14.1.tgz -O - | \
+    tar -zxvf - -C /tmp/ &&\
+    cp /tmp/onnxruntime-linux-x64-gpu-1.14.1/lib/* /app/lib/
+
+RUN \
     cd /app/lib/python3.10/site-packages/wyoming_piper/; \
     for file in /tmp/wyoming_piper*.diff;do patch -p0 --forward < $file;done;
 
