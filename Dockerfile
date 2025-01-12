@@ -36,7 +36,7 @@ WORKDIR /build
 COPY patches/* /tmp/
 RUN \
     git clone https://github.com/rhasspy/piper.git /build &&\
-    cp /tmp/piper_CMakeLists.txt /buld/CMakeLists.txt
+    cp /tmp/piper_CMakeLists.txt /build/CMakeLists.txt
 
 RUN cmake -Bbuild -DCMAKE_INSTALL_PREFIX=install
 RUN ONNXRUNTIME_VERSION=${ONNXRUNTIME_VERSION} cmake --build build --config Release
