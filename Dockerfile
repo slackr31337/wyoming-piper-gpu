@@ -1,9 +1,9 @@
 ##########################################
-FROM nvidia/cuda:12.3.2-cudnn9-runtime-ubuntu22.04 AS build
+FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04 AS build
 
 ARG TARGETARCH=linux_x86_64
 ARG WYOMING_PIPER_VERSION="1.5.2"
-ARG ONNXRUNTIME_VERSION="1.20.1"
+ARG ONNXRUNTIME_VERSION="1.18.1"
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
@@ -70,7 +70,7 @@ RUN \
     cp /build/install/lib*.so* /app/lib/
 
 ##########################################
-FROM nvidia/cuda:12.3.2-cudnn9-runtime-ubuntu22.04 AS dist
+FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04 AS dist
 
 ENV PYTHONUNBUFFERED=1
 
