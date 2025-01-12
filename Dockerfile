@@ -32,7 +32,7 @@ COPY run.sh .
 COPY patches/* /tmp/
 
 RUN \
-    mkdir -p /app/lib /app/include &&\
+    mkdir -p /app/lib /app/include/piper-phonemize &&\
     python3 -m venv /app &&\
     . /app/bin/activate && \
     \
@@ -47,6 +47,10 @@ RUN \
     \
     wget -q https://github.com/rhasspy/piper-phonemize/releases/download/v${PIPER_PHONEMIZE_VERSION}/libpiper_phonemize-amd64.tar.gz -O -| \
     tar -zxvf - -C /app &&\
+    \
+    mv /app/include/*.hpp /app/include/piper-phonemize/ &&\
+    mv /app/include/cpu_provider_factory.h /app/include/piper-phonemize/ &&\
+    mv /app/include/provider_options.h /app/include/piper-phonemize/ &&\
     \
     ln -s /app/lib/python3.10/site-packages/piper_phonemize /app/share &&\
     \
