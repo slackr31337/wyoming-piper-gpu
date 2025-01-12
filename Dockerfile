@@ -40,7 +40,7 @@ RUN \
     cp /tmp/piper_CMakeLists.txt /build/CMakeLists.txt
 
 RUN ONNXRUNTIME_VERSION=${ONNXRUNTIME_VERSION} cmake -Bbuild -DCMAKE_INSTALL_PREFIX=install
-RUN ONNXRUNTIME_VERSION=${ONNXRUNTIME_VERSION} cmake --build build --config Release
+RUN cmake --build build --config Release
 RUN cmake --install build
 
 WORKDIR /app
