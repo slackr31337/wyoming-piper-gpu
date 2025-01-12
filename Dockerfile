@@ -3,7 +3,8 @@ FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04 AS build
 
 ARG TARGETARCH=linux_x86_64
 ARG WYOMING_PIPER_VERSION="1.5.2"
-ARG ONNXRUNTIME_VERSION="1.17.3"
+ARG PIPER_VERSION="1.2.0"
+ARG PIPER_PHONEMIZE_VERSION="1.1.0"
 
 ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
@@ -25,44 +26,33 @@ RUN \
         ca-certificates \
         pkg-config
 
-RUN \
-    mkdir -p /app/lib &&\
-    cd /tmp && wget -q https://github.com/microsoft/onnxruntime/releases/download/v${ONNXRUNTIME_VERSION}/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}.tgz &&\
-    tar xzf onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}.tgz &&\
-    cp -rfv /tmp/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}/lib/lib* /app/lib &&\
-    cp -rfv /tmp/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}/include/* /usr/local/include/
-
-WORKDIR /build
-
-COPY patches/* /tmp/
-RUN \
-    git clone https://github.com/rhasspy/piper.git /build &&\
-    cd /build && patch -p0 --forward < /tmp/piper_CMakeLists.patch
-
-RUN ONNXRUNTIME_VERSION=${ONNXRUNTIME_VERSION} cmake -Bbuild -DCMAKE_INSTALL_PREFIX=install
-RUN cmake --build build --config Release
-RUN cmake --install build
-
 WORKDIR /app
 
+COPY run.sh .
+
 RUN \
+    mkdir -p /app/lib &&\
+    \
     python3 -m venv /app &&\
-    mkdir /app/piper && cp -rfv /build/install/* /app/piper/ &&\
-    chmod 755 /app/piper/piper /app/piper/espeak-ng
-
-RUN /app/piper/piper --help
-
-COPY run.sh /app/
-
-RUN \
-    . /app/bin/activate && \
+    \
+    source /app/bin/activate && \
+    \
+    wget -q https://github.com/rhasspy/piper-phonemize/releases/download/v${PIPER_PHONEMIZE_VERSION}/piper_phonemize-${PIPER_PHONEMIZE_VERSION}-cp310-cp310-manylinux_2_28_x86_64.whl \
+        -O /tmp/piper_phonemize-${PIPER_PHONEMIZE_VERSION}-py3-none-any.whl &&\
+    \
+    /app/bin/python3 -m pip install --no-cache-dir --force-reinstall --no-deps \
+        "piper-tts==${PIPER_VERSION}" &&\
+    \
+    /app/bin/python3 -m pip install --no-cache-dir --force-reinstall --no-deps \
+        piper_phonemize-1${PIPER_PHONEMIZE_VERSION}py3-none-any.whl &&\
+    \
     /app/bin/python3 -m pip install --no-cache-dir \
         "wyoming-piper @ https://github.com/rhasspy/wyoming-piper/archive/refs/tags/v${WYOMING_PIPER_VERSION}.tar.gz"
 
 RUN \
     cd /app/lib/python3.10/site-packages/wyoming_piper/; \
-    for file in /tmp/wyoming_piper*.diff;do patch -p0 --forward < $file;done; \
-    cp /build/install/lib*.so* /app/lib/
+    for file in /tmp/wyoming_piper*.diff;do patch -p0 --forward < $file;done;
+    # cp /build/install/lib*.so* /app/lib/
 
 ##########################################
 FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04 AS dist
