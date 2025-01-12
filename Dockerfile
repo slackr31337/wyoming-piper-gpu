@@ -5,7 +5,6 @@ ARG TARGETARCH=linux_x86_64
 ARG WYOMING_PIPER_VERSION="1.5.2"
 ARG PIPER_VERSION="1.2.0"
 ARG PIPER_PHONEMIZE_VERSION="1.1.0"
-ARG ONNXRUNTIME_VERSION="1.14.1"
 
 ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
@@ -46,20 +45,17 @@ RUN \
     /app/bin/python3 -m pip install --no-cache-dir --force-reinstall --no-deps \
         /tmp/piper_phonemize-${PIPER_PHONEMIZE_VERSION}-py3-none-any.whl &&\
     \
+    wget -q https://github.com/rhasspy/piper-phonemize/releases/download/v${PIPER_PHONEMIZE_VERSION}/libpiper_phonemize-amd64.tar.gz -O -| \
+    tar -zxvf - -C /app &&\
+    \
     ln -s /app/lib/python3.10/site-packages/piper_phonemize /app/share &&\
-    cp -rfv /app/lib/python3.10/site-packages/piper_phonemize.libs/* /app/lib/ &&\
     \
     LATEST_PIPER_VERSION=$(wget "https://api.github.com/repos/rhasspy/piper/releases/latest" -O -|awk '/tag_name/{print $4;exit}' FS='[""]') && \
     \
     wget "https://github.com/rhasspy/piper/releases/download/${LATEST_PIPER_VERSION}/piper_${TARGETARCH}.tar.gz" -O -|tar -zxvf - -C /usr/share &&\
     \
     /app/bin/python3 -m pip install --no-cache-dir \
-        "wyoming-piper @ https://github.com/rhasspy/wyoming-piper/archive/refs/tags/v${WYOMING_PIPER_VERSION}.tar.gz" &&\
-    \
-    cd /tmp && wget -q https://github.com/microsoft/onnxruntime/releases/download/v${ONNXRUNTIME_VERSION}/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}.tgz &&\
-    tar xzf onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}.tgz &&\
-    cp -rfv /tmp/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}/lib/lib* /app/lib &&\
-    cp -rfv /tmp/onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}/include/* /app/include/
+        "wyoming-piper @ https://github.com/rhasspy/wyoming-piper/archive/refs/tags/v${WYOMING_PIPER_VERSION}.tar.gz"
 
 
 WORKDIR /work
