@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export LD_LIBRARY_PATH=/app/lib/:/usr/local/cuda-12.3/targets/x86_64-linux/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/app/lib/:/usr/local/cuda-11.8/targets/x86_64-linux/lib:$LD_LIBRARY_PATH
 
 # Run wyoming-piper server
 source /app/bin/activate
@@ -16,6 +16,4 @@ source /app/bin/activate
     --max-piper-procs "${PIPER_PROCS:-1}" \
     --data-dir /data \
     --download-dir /data \
-    "$@"
-
-# --use-cuda crashes with onnxruntime 1.20.1
+    --use-cuda "$@"
