@@ -12,14 +12,14 @@ docker pull ghcr.io/slackr31337/wyoming-piper-gpu:latest
 
 # Use environment variable to set piper voice
 
-PIPER_VOICE="en_US-lessac-medium"
-
-PIPER_LENGTH="1.0"
-
-PIPER_NOISE="0.667"
-
-PIPER_NOISEW="0.333"
-
-PIPER_SPEAKER="0"
-
-PIPER_SILENCE="1.2"
+> PIPER_VOICE="en_US-lessac-medium"
+> 
+> PIPER_LENGTH="1.0"
+> 
+> PIPER_NOISE="0.667"
+> 
+> PIPER_NOISEW="0.333"
+> 
+> PIPER_SPEAKER="0"
+> 
+> PIPER_SILENCE="1.2"
