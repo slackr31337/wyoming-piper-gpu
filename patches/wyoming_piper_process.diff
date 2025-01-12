@@ -1,9 +1,12 @@
---- process.py	2025-01-04 19:50:00.000000000 +0000
-+++ process.py.patched	2025-01-04 20:58:10.813174885 +0000
-@@ -148,6 +147,12 @@
+--- process.py  2025-01-12 12:08:32.699567820 -0500
++++ process.py.patched  2025-01-12 12:28:28.568004323 -0500
+@@ -148,6 +148,15 @@
              if self.args.noise_w:
                  piper_args.extend(["--noise-w", str(self.args.noise_w)])
- 
+
++            if self.args.sentence_silence:
++                piper_args.extend(["--sentence-silence", str(self.args.sentence_silence)])
++
 +            if self.args.espeak_data_dir:
 +                piper_args.extend(["--espeak_data", str(self.args.espeak_data_dir)])
 +
