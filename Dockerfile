@@ -33,25 +33,26 @@ RUN \
 
 WORKDIR /build
 
+COPY patches/* /tmp/
 RUN \
-    git clone https://github.com/rhasspy/piper.git /build
+    git clone https://github.com/rhasspy/piper.git /build &&\
+    cp /tmp/piper_CMakeLists.txt /buld/CMakeLists.txt
 
-RUN ONNXRUNTIME_DIR=/app/lib ONNXRUNTIME_VERSION=${ONNXRUNTIME_VERSION} cmake -Bbuild -DCMAKE_INSTALL_PREFIX=install
-RUN ONNXRUNTIME_DIR=/app/lib ONNXRUNTIME_VERSION=${ONNXRUNTIME_VERSION} cmake --build build --config Release
-RUN ONNXRUNTIME_DIR=/app/lib ONNXRUNTIME_VERSION=${ONNXRUNTIME_VERSION} cmake --install build
+RUN cmake -Bbuild -DCMAKE_INSTALL_PREFIX=install
+RUN ONNXRUNTIME_VERSION=${ONNXRUNTIME_VERSION} cmake --build build --config Release
+RUN cmake --install build
 
 WORKDIR /app
 
 RUN \
     python3 -m venv /app &&\
-    cp -rfv /build/install/* /app/piper/ &&\
+    mkdir /app/piper && cp -rfv /build/install/* /app/piper/ &&\
     chmod 755 /app/piper/piper /app/piper/espeak-ng
 
 RUN /app/piper/piper --help
 
 COPY requirements.txt /app/
 COPY run.sh /app/
-COPY patches/* /tmp/
 
 RUN \
     . /app/bin/activate && \
