@@ -3,7 +3,7 @@ FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04 AS build
 
 ARG TARGETARCH=linux_x86_64
 ARG WYOMING_PIPER_VERSION="1.5.2"
-ARG ONNXRUNTIME_VERSION="1.18.1"
+ARG ONNXRUNTIME_VERSION="1.17.3"
 
 ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
@@ -52,15 +52,10 @@ RUN \
 
 RUN /app/piper/piper --help
 
-COPY requirements.txt /app/
 COPY run.sh /app/
 
 RUN \
     . /app/bin/activate && \
-    /app/bin/python3 -m pip install --no-cache-dir \
-        -r /app/requirements.txt \
-        &&\
-    \
     /app/bin/python3 -m pip install --no-cache-dir \
         "wyoming-piper @ https://github.com/rhasspy/wyoming-piper/archive/refs/tags/v${WYOMING_PIPER_VERSION}.tar.gz"
 
