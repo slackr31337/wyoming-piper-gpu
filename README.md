@@ -34,7 +34,7 @@ docker pull ghcr.io/slackr31337/wyoming-piper-gpu:latest
     environment:  
       - PIPER_VOICE=en_US-amy-medium
     ports:  
-      - 10300:10300
+      - 10200:10200
     volumes:  
       - /path/to/persistent/data:/data  
     restart: unless-stopped
