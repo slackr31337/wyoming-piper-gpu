@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-export LD_LIBRARY_PATH=/app/lib/:/usr/local/cuda-11.8/targets/x86_64-linux/lib:$LD_LIBRARY_PATH
-
 # Run wyoming-piper server
-source /app/bin/activate
 /app/bin/python3 -m wyoming_piper \
     --piper '/app/piper/piper' \
     --uri 'tcp://0.0.0.0:10200' \
