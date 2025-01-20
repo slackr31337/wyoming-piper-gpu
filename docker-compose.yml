@@ -1,0 +1,22 @@
+services:
+  wyoming-piper:  
+    image: slackr31337/wyoming-piper-gpu:latest  
+    container_name: wyoming-piper
+    environment:  
+      - PIPER_VOICE="en_US-lessac-medium"
+    ports:
+      - 10300:10300
+    volumes:  
+      - /path/to/persistent/data:/data  
+    restart: unless-stopped
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities:
+                - gpu
+                - utility
+                - compute
