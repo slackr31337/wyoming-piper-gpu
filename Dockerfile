@@ -89,7 +89,8 @@ RUN \
 FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04 AS dist
 
 ENV PYTHONUNBUFFERED=1
-ENV PATH="/bin:$PATH"
+ENV LD_LIBRARY_PATH="/app/lib:/usr/local/cuda-11.8/targets/x86_64-linux/lib:${LD_LIBRARY_PATH}"
+ENV PATH="/app/bin:${PATH}" 
 
 RUN \
     mkdir -p /data /app &&\
