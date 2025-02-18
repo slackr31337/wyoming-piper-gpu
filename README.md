@@ -23,6 +23,8 @@ docker pull ghcr.io/slackr31337/wyoming-piper-gpu:latest
 > PIPER_SPEAKER="0"
 > 
 > PIPER_SILENCE="0.8"
+>
+> LOG_LEVEL="debug" # For debug logging
 
 
 # Docker compose
