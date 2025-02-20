@@ -5,7 +5,7 @@ services:
     environment:  
       - PIPER_VOICE="en_US-lessac-medium"
     ports:
-      - 10300:10300
+      - 10200:10200
     volumes:  
       - /path/to/persistent/data:/data  
     restart: unless-stopped
